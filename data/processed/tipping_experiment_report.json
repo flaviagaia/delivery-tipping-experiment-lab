@@ -1,0 +1,132 @@
+{
+  "dataset_source": "synthetic_delivery_tipping_experiment",
+  "session_count": 1200,
+  "variant_counts": {
+    "control": 600,
+    "treatment": 600
+  },
+  "experiment_design": {
+    "unit_of_randomization": "checkout_session",
+    "treatment_description": "Suggested tip nudge with stronger default anchor during checkout",
+    "primary_metric": "gross_tip_per_session",
+    "secondary_metrics": [
+      "tip_attach_rate",
+      "avg_tip_per_completed_order"
+    ],
+    "guardrails": [
+      "checkout_conversion_rate",
+      "driver_acceptance_rate"
+    ]
+  },
+  "metrics": {
+    "primary_metric_gross_tip_per_session": {
+      "control": 1.4685,
+      "treatment": 1.9547,
+      "absolute_lift": 0.4862,
+      "relative_lift_pct": 33.11,
+      "ci_low": 0.2318,
+      "ci_high": 0.7405
+    },
+    "secondary_metric_tip_attach_rate": {
+      "control": 0.36,
+      "treatment": 0.4317,
+      "absolute_lift": 0.0717,
+      "relative_lift_pct": 19.91,
+      "ci_low": 0.0164,
+      "ci_high": 0.1269
+    },
+    "secondary_metric_avg_tip_per_completed_order": {
+      "control": 2.482,
+      "treatment": 3.0864,
+      "absolute_lift": 0.6043,
+      "relative_lift_pct": 24.35,
+      "ci_low": 0.2744,
+      "ci_high": 0.9343
+    },
+    "guardrail_checkout_conversion_rate": {
+      "control": 0.5917,
+      "treatment": 0.6333,
+      "absolute_lift": 0.0417,
+      "relative_lift_pct": 7.04,
+      "ci_low": -0.0135,
+      "ci_high": 0.0968
+    },
+    "guardrail_driver_acceptance_rate": {
+      "control": 0.435,
+      "treatment": 0.4833,
+      "absolute_lift": 0.0483,
+      "relative_lift_pct": 11.11,
+      "ci_low": -0.008,
+      "ci_high": 0.1047
+    }
+  },
+  "segment_lifts_by_region": {
+    "east": {
+      "control": 1.3113,
+      "treatment": 2.1677,
+      "absolute_lift": 0.8564,
+      "relative_lift_pct": 65.31,
+      "ci_low": 0.3391,
+      "ci_high": 1.3737
+    },
+    "north": {
+      "control": 1.4518,
+      "treatment": 1.7293,
+      "absolute_lift": 0.2776,
+      "relative_lift_pct": 19.12,
+      "ci_low": -0.2138,
+      "ci_high": 0.7689
+    },
+    "south": {
+      "control": 1.1903,
+      "treatment": 1.6618,
+      "absolute_lift": 0.4716,
+      "relative_lift_pct": 39.62,
+      "ci_low": -0.0071,
+      "ci_high": 0.9503
+    },
+    "west": {
+      "control": 2.0078,
+      "treatment": 2.2558,
+      "absolute_lift": 0.248,
+      "relative_lift_pct": 12.35,
+      "ci_low": -0.3253,
+      "ci_high": 0.8213
+    }
+  },
+  "segment_lifts_by_user_segment": {
+    "casual": {
+      "control": 1.2963,
+      "treatment": 1.8729,
+      "absolute_lift": 0.5766,
+      "relative_lift_pct": 44.47,
+      "ci_low": 0.1437,
+      "ci_high": 1.0094
+    },
+    "new_user": {
+      "control": 1.1458,
+      "treatment": 1.4638,
+      "absolute_lift": 0.3181,
+      "relative_lift_pct": 27.76,
+      "ci_low": -0.0637,
+      "ci_high": 0.6999
+    },
+    "power_user": {
+      "control": 1.9635,
+      "treatment": 2.5273,
+      "absolute_lift": 0.5638,
+      "relative_lift_pct": 28.72,
+      "ci_low": 0.0815,
+      "ci_high": 1.0462
+    }
+  },
+  "recommendation": {
+    "decision": "ship_treatment",
+    "reasoning": [
+      "The primary metric is gross tip per exposed checkout session, because it captures both tipping behavior and any conversion effects.",
+      "Checkout conversion and driver acceptance are treated as guardrails to avoid shipping a feature that helps tips while harming the marketplace.",
+      "Treatment is recommended only when the primary metric improves with positive confidence interval support and guardrails stay within acceptable limits."
+    ]
+  },
+  "report_artifact": "/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json"
+}

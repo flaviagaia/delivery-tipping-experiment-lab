@@ -1,0 +1,16 @@
+{
+  "primary_reference": {
+    "name": "NYC TLC Trip Record Data",
+    "url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+    "role": "Public trip marketplace data with fare, time, and tip behavior fields used here only as a behavioral reference for gratuity and operational signals."
+  },
+  "project_note": {
+    "name": "Synthetic delivery checkout experiment",
+    "url": "local_runtime_only",
+    "role": "The runtime dataset in this repository is synthetic because production-grade food delivery tipping experiments are not typically public."
+  },
+  "notes": [
+    "This project simulates an A/B test for a new tipping nudge shown during checkout.",
+    "The data is intended for product experimentation practice, not for business forecasting in a real marketplace."
+  ]
+}
