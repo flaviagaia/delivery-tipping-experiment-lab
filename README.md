@@ -56,6 +56,26 @@ Observação importante:
    - `ship_treatment`
    - ou `needs_iteration`
 
+## Desenho experimental
+
+### Unidade de randomização
+
+- `checkout_session`
+
+### Hipótese de produto
+
+- um nudge com âncora de gorjeta mais forte pode aumentar a monetização via tips;
+- mas só deve ser lançado se esse ganho não vier às custas de conversão ou da saúde de supply.
+
+### Leitura causal esperada
+
+O projeto foi estruturado para responder:
+
+- o tratamento aumentou a propensão a dar gorjeta?
+- o tratamento aumentou o valor de gorjeta por sessão exposta?
+- o tratamento mudou a probabilidade de o pedido ser aceito?
+- o tratamento prejudicou o checkout?
+
 ## Métrica principal
 
 A métrica principal do experimento é:
@@ -105,6 +125,19 @@ Cada linha da amostra local representa uma sessão de checkout com campos como:
 - `tip_amount`
 - `driver_accepted`
 
+Semântica analítica dos campos principais:
+
+- `converted_order`
+  - se a sessão terminou em pedido
+- `tipped`
+  - se houve gorjeta
+- `tip_pct`
+  - percentual de gorjeta sobre subtotal
+- `tip_amount`
+  - valor absoluto da gorjeta
+- `driver_accepted`
+  - proxy de impacto do incentivo econômico no lado da oferta
+
 ## Técnicas utilizadas
 
 - simulação de experimento A/B
@@ -126,6 +159,19 @@ Cada linha da amostra local representa uma sessão de checkout com campos como:
 - `unittest`
 
 O projeto foi mantido propositalmente sem dependências pesadas para continuar leve e reproduzível.
+
+## Contrato do relatório
+
+O artefato [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) traz:
+
+- metadados do experimento
+- contagem por variante
+- primary metric
+- secondary metrics
+- guardrails
+- intervalos de confiança aproximados
+- análise segmentada
+- recomendação final de rollout
 
 ## Arquivos principais
 
