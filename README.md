@@ -2,111 +2,50 @@
 
 ## Português
 
-`delivery-tipping-experiment-lab` é um projeto de **cientista de dados de marketplace** inspirado em perguntas comuns de entrevista da DoorDash: **como medir o sucesso de um novo recurso de gorjetas e como decidir se vale a pena lançar a mudança**.
+### Visão geral
 
-O projeto simula um experimento A/B em checkout para testar uma nova estratégia de gorjetas:
+`delivery-tipping-experiment-lab` é um projeto de experimentação de produto para marketplace, inspirado em uma pergunta clássica de entrevista: **como medir o sucesso de um novo recurso de gorjetas e decidir se ele deve ser lançado**.
+
+O experimento compara:
 
 - `control`
   - experiência atual de checkout
 - `treatment`
   - nudge com âncora de gorjeta mais forte durante o pedido
 
-## Objetivo analítico
+### Objetivo analítico
 
 O objetivo não é maximizar gorjeta isoladamente. O objetivo correto é medir se o novo recurso:
 
-- aumenta a gorjeta total capturada pela plataforma por sessão exposta;
-- melhora a experiência e o incentivo econômico dos entregadores;
-- sem prejudicar conversão de checkout ou aceitação do pedido.
+- aumenta gorjeta por sessão exposta;
+- melhora o incentivo econômico do entregador;
+- sem prejudicar conversão ou aceitação do pedido.
 
-Essa é a lógica de produto que normalmente separa uma boa resposta de entrevista de uma resposta superficial.
+### Desenho experimental
 
-## Base de dados
+- unidade de randomização: `checkout_session`
+- hipótese principal:
+  - o novo nudge aumenta a monetização por gorjeta sem machucar o marketplace
 
-O runtime do projeto usa uma **base sintética** de sessões de checkout porque dados públicos de experimentos de gorjeta em delivery quase nunca existem em nível de produto.
+### Métricas
 
-Referência pública usada no projeto:
-
-- [NYC TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
-
-Papel da referência:
-
-- inspirar sinais comportamentais de marketplace envolvendo:
-  - tempo
-  - região
-  - valor da corrida/pedido
-  - gorjeta
-
-Observação importante:
-
-- o projeto **não afirma** que dados de táxi são equivalentes a delivery;
-- a referência pública existe para apoiar a plausibilidade dos sinais;
-- a análise executável é inteiramente sintética e voltada para experimentação de produto.
-
-## O que o projeto faz
-
-1. gera uma base local de `checkout_sessions`;
-2. randomiza sessões entre `control` e `treatment`;
-3. calcula métricas primárias, secundárias e guardrails;
-4. estima lift absoluto, lift relativo e intervalo de confiança aproximado;
-5. compara impacto por:
-   - região
-   - segmento de usuário
-6. devolve uma recomendação final:
-   - `ship_treatment`
-   - ou `needs_iteration`
-
-## Desenho experimental
-
-### Unidade de randomização
-
-- `checkout_session`
-
-### Hipótese de produto
-
-- um nudge com âncora de gorjeta mais forte pode aumentar a monetização via tips;
-- mas só deve ser lançado se esse ganho não vier às custas de conversão ou da saúde de supply.
-
-### Leitura causal esperada
-
-O projeto foi estruturado para responder:
-
-- o tratamento aumentou a propensão a dar gorjeta?
-- o tratamento aumentou o valor de gorjeta por sessão exposta?
-- o tratamento mudou a probabilidade de o pedido ser aceito?
-- o tratamento prejudicou o checkout?
-
-## Métrica principal
-
-A métrica principal do experimento é:
+Métrica principal:
 
 - `gross_tip_per_session`
 
-Por que ela é melhor do que olhar só `avg_tip`:
-
-- incorpora o efeito de gorjeta;
-- mas também penaliza queda de conversão;
-- então evita otimizar uma UX que aumenta gorjeta apenas entre quem ainda conclui pedido.
-
-## Métricas secundárias
+Métricas secundárias:
 
 - `tip_attach_rate`
 - `avg_tip_per_completed_order`
 
-## Guardrails
+Guardrails:
 
 - `checkout_conversion_rate`
 - `driver_acceptance_rate`
 
-Esses guardrails existem porque, em um marketplace, uma mudança de tipping pode:
+### Estrutura dos dados
 
-- ajudar o entregador;
-- mas piorar conversão;
-- ou afetar oferta/aceitação de forma indireta.
-
-## Estrutura dos dados
-
-Cada linha da amostra local representa uma sessão de checkout com campos como:
+Cada linha representa uma sessão de checkout com campos como:
 
 - `session_id`
 - `user_id`
@@ -125,30 +64,16 @@ Cada linha da amostra local representa uma sessão de checkout com campos como:
 - `tip_amount`
 - `driver_accepted`
 
-Semântica analítica dos campos principais:
-
-- `converted_order`
-  - se a sessão terminou em pedido
-- `tipped`
-  - se houve gorjeta
-- `tip_pct`
-  - percentual de gorjeta sobre subtotal
-- `tip_amount`
-  - valor absoluto da gorjeta
-- `driver_accepted`
-  - proxy de impacto do incentivo econômico no lado da oferta
-
-## Técnicas utilizadas
+### Técnicas utilizadas
 
 - simulação de experimento A/B
 - definição de métrica primária orientada a produto
-- cálculo de `absolute lift`
-- cálculo de `relative lift`
+- lift absoluto e relativo
 - intervalo de confiança aproximado por diferença de médias
 - análise segmentada por região e tipo de usuário
-- recomendação de lançamento baseada em guardrails
+- recomendação de rollout com guardrails
 
-## Ferramentas e bibliotecas
+### Ferramentas e bibliotecas
 
 - `Python`
 - `csv`
@@ -158,11 +83,9 @@ Semântica analítica dos campos principais:
 - `random`
 - `unittest`
 
-O projeto foi mantido propositalmente sem dependências pesadas para continuar leve e reproduzível.
+### Contrato do relatório
 
-## Contrato do relatório
-
-O artefato [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) traz:
+O artefato [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) inclui:
 
 - metadados do experimento
 - contagem por variante
@@ -171,25 +94,9 @@ O artefato [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVI
 - guardrails
 - intervalos de confiança aproximados
 - análise segmentada
-- recomendação final de rollout
+- recomendação final
 
-## Arquivos principais
-
-- [main.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/main.py)
-- [src/data_factory.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/data_factory.py)
-- [src/modeling.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/modeling.py)
-- [tests/test_project.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/tests/test_project.py)
-
-## Resultados esperados do MVP
-
-O treatment foi desenhado para:
-
-- aumentar `gross_tip_per_session`;
-- aumentar `tip_attach_rate`;
-- manter `checkout_conversion_rate` praticamente estável;
-- melhorar `driver_acceptance_rate`.
-
-## Resultados atuais
+### Resultados atuais
 
 - `dataset_source = synthetic_delivery_tipping_experiment`
 - `session_count = 1200`
@@ -203,17 +110,18 @@ O treatment foi desenhado para:
 
 Leitura honesta:
 
-- o maior ganho está em `gross_tip_per_session`, que é a métrica mais alinhada à decisão de produto;
-- a conversão não piora de forma relevante neste sample;
-- a aceitação do entregador melhora, mas com intervalo de confiança que ainda justificaria acompanhamento em rollout progressivo.
+- o maior ganho está em `gross_tip_per_session`;
+- a conversão não piora de forma relevante;
+- a aceitação do entregador melhora, mas ainda justificaria acompanhamento em rollout progressivo.
 
-## Artefatos gerados
+### Arquivos principais
 
-- [data/raw/checkout_sessions.csv](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/raw/checkout_sessions.csv)
-- [data/raw/public_dataset_reference.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/raw/public_dataset_reference.json)
-- [data/processed/tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json)
+- [main.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/main.py)
+- [src/data_factory.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/data_factory.py)
+- [src/modeling.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/modeling.py)
+- [tests/test_project.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/tests/test_project.py)
 
-## Como executar
+### Como executar
 
 ```bash
 python3 main.py
@@ -221,12 +129,133 @@ python3 -m unittest discover -s tests -v
 python3 -m py_compile main.py src/data_factory.py src/modeling.py tests/test_project.py
 ```
 
-## Como defender em entrevista
+### Como defender em entrevista
 
-> Eu mediria sucesso de um novo recurso de gorjetas com uma métrica primária que balanceie valor de gorjeta e impacto em conversão, como gross tip per exposed session. Depois olharia tip attach rate e average tip como métricas secundárias, e manteria checkout conversion e driver acceptance como guardrails. Esse projeto mostra exatamente esse raciocínio, incluindo segmentação e recomendação final de rollout.
+> Eu mediria sucesso de um novo recurso de gorjetas com uma métrica primária que balanceie valor de gorjeta e impacto em conversão, como gross tip per exposed session. Depois olharia tip attach rate e average tip como métricas secundárias, e manteria checkout conversion e driver acceptance como guardrails.
 
 ## English
 
-`delivery-tipping-experiment-lab` is a marketplace experimentation project designed around a common DoorDash-style product question: **how to measure the success of a new tipping feature and decide whether it should ship**.
+### Overview
 
-The repository simulates a checkout A/B test, evaluates a product-aligned primary metric, tracks secondary metrics and guardrails, and returns a final launch recommendation. It is intentionally lightweight, reproducible, and centered on product experimentation rather than on generic ML modeling.
+`delivery-tipping-experiment-lab` is a marketplace product experimentation project built around a common interview question: **how to measure the success of a new tipping feature and decide whether it should ship**.
+
+The experiment compares:
+
+- `control`
+  - current checkout experience
+- `treatment`
+  - stronger tip-anchor nudge during checkout
+
+### Analytical objective
+
+The goal is not to maximize tip amount in isolation. The correct goal is to measure whether the feature:
+
+- increases tip revenue per exposed session;
+- improves courier-side economic incentives;
+- without hurting conversion or order acceptance.
+
+### Experimental design
+
+- unit of randomization: `checkout_session`
+- core hypothesis:
+  - the new nudge increases tip monetization without damaging marketplace health
+
+### Metrics
+
+Primary metric:
+
+- `gross_tip_per_session`
+
+Secondary metrics:
+
+- `tip_attach_rate`
+- `avg_tip_per_completed_order`
+
+Guardrails:
+
+- `checkout_conversion_rate`
+- `driver_acceptance_rate`
+
+### Data structure
+
+Each row represents a checkout session with fields such as:
+
+- `session_id`
+- `user_id`
+- `region`
+- `user_segment`
+- `device`
+- `variant`
+- `peak_hour`
+- `rainy_weather`
+- `basket_size`
+- `order_subtotal`
+- `delivery_fee`
+- `converted_order`
+- `tipped`
+- `tip_pct`
+- `tip_amount`
+- `driver_accepted`
+
+### Techniques used
+
+- A/B experiment simulation
+- product-aligned primary metric design
+- absolute and relative lift
+- approximate confidence interval using difference in means
+- segmented analysis by region and user type
+- rollout recommendation based on guardrails
+
+### Tools and libraries
+
+- `Python`
+- `csv`
+- `json`
+- `math`
+- `pathlib`
+- `random`
+- `unittest`
+
+### Report contract
+
+The artifact [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) includes:
+
+- experiment metadata
+- variant counts
+- primary metric
+- secondary metrics
+- guardrails
+- approximate confidence intervals
+- segmented analysis
+- final recommendation
+
+### Current results
+
+- `dataset_source = synthetic_delivery_tipping_experiment`
+- `session_count = 1200`
+- `variant_counts = {'control': 600, 'treatment': 600}`
+- `primary_metric_gross_tip_per_session absolute_lift = 0.4862`
+- `primary_metric_gross_tip_per_session ci = [0.2318, 0.7405]`
+- `secondary_metric_tip_attach_rate absolute_lift = 0.0717`
+- `guardrail_checkout_conversion_rate absolute_lift = 0.0417`
+- `guardrail_driver_acceptance_rate absolute_lift = 0.0483`
+- `decision = ship_treatment`
+
+### Main files
+
+- [main.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/main.py)
+- [src/data_factory.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/data_factory.py)
+- [src/modeling.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/modeling.py)
+- [tests/test_project.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/tests/test_project.py)
+
+### How to run
+
+```bash
+python3 main.py
+python3 -m unittest discover -s tests -v
+python3 -m py_compile main.py src/data_factory.py src/modeling.py tests/test_project.py
+```
+
+### Interview framing
+
+> I would measure the success of a new tipping feature with a primary metric that balances tip value and conversion impact, such as gross tip per exposed session. Then I would look at tip attach rate and average tip as secondary metrics, while keeping checkout conversion and driver acceptance as guardrails.
