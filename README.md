@@ -4,7 +4,7 @@
 
 ### Visão geral
 
-`delivery-tipping-experiment-lab` é um projeto de experimentação de produto para marketplace, inspirado em uma pergunta clássica de entrevista: **como medir o sucesso de um novo recurso de gorjetas e decidir se ele deve ser lançado**.
+`delivery-tipping-experiment-lab` é um projeto de experimentação de produto para marketplace focado em medir o impacto de mudanças no fluxo de gorjetas e decidir se elas devem ser lançadas.
 
 O experimento compara:
 
@@ -85,7 +85,7 @@ Cada linha representa uma sessão de checkout com campos como:
 
 ### Contrato do relatório
 
-O artefato [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) inclui:
+O artefato [tipping_experiment_report.json](data/processed/tipping_experiment_report.json) inclui:
 
 - metadados do experimento
 - contagem por variante
@@ -116,10 +116,10 @@ Leitura honesta:
 
 ### Arquivos principais
 
-- [main.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/main.py)
-- [src/data_factory.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/data_factory.py)
-- [src/modeling.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/modeling.py)
-- [tests/test_project.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/tests/test_project.py)
+- [main.py](main.py)
+- [src/data_factory.py](src/data_factory.py)
+- [src/modeling.py](src/modeling.py)
+- [tests/test_project.py](tests/test_project.py)
 
 ### Como executar
 
@@ -129,15 +129,12 @@ python3 -m unittest discover -s tests -v
 python3 -m py_compile main.py src/data_factory.py src/modeling.py tests/test_project.py
 ```
 
-### Como defender em entrevista
-
-> Eu mediria sucesso de um novo recurso de gorjetas com uma métrica primária que balanceie valor de gorjeta e impacto em conversão, como gross tip per exposed session. Depois olharia tip attach rate e average tip como métricas secundárias, e manteria checkout conversion e driver acceptance como guardrails.
 
 ## English
 
 ### Overview
 
-`delivery-tipping-experiment-lab` is a marketplace product experimentation project built around a common interview question: **how to measure the success of a new tipping feature and decide whether it should ship**.
+`delivery-tipping-experiment-lab` is a marketplace product experimentation project focused on measuring the impact of tipping-flow changes and deciding whether they should ship.
 
 The experiment compares:
 
@@ -218,7 +215,7 @@ Each row represents a checkout session with fields such as:
 
 ### Report contract
 
-The artifact [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json) includes:
+The artifact [tipping_experiment_report.json](data/processed/tipping_experiment_report.json) includes:
 
 - experiment metadata
 - variant counts
@@ -243,10 +240,10 @@ The artifact [tipping_experiment_report.json](/Users/flaviagaia/Documents/CV_FLA
 
 ### Main files
 
-- [main.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/main.py)
-- [src/data_factory.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/data_factory.py)
-- [src/modeling.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/src/modeling.py)
-- [tests/test_project.py](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/tests/test_project.py)
+- [main.py](main.py)
+- [src/data_factory.py](src/data_factory.py)
+- [src/modeling.py](src/modeling.py)
+- [tests/test_project.py](tests/test_project.py)
 
 ### How to run
 
@@ -255,7 +252,3 @@ python3 main.py
 python3 -m unittest discover -s tests -v
 python3 -m py_compile main.py src/data_factory.py src/modeling.py tests/test_project.py
 ```
-
-### Interview framing
-
-> I would measure the success of a new tipping feature with a primary metric that balances tip value and conversion impact, such as gross tip per exposed session. Then I would look at tip attach rate and average tip as secondary metrics, while keeping checkout conversion and driver acceptance as guardrails.

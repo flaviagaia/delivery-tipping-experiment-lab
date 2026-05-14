@@ -128,5 +128,5 @@
       "Treatment is recommended only when the primary metric improves with positive confidence interval support and guardrails stay within acceptable limits."
     ]
   },
-  "report_artifact": "/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/delivery-tipping-experiment-lab/data/processed/tipping_experiment_report.json"
+  "report_artifact": "data/processed/tipping_experiment_report.json"
 }
